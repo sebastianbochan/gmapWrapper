@@ -1,4 +1,3 @@
-
 var gmap,
     maps;
 
@@ -7,8 +6,6 @@ gmap = google.maps;
 maps = {
     map: {},
     init: function(id,zoom,lat,lng){
-
-        //gmap.event.addDomListener(window, 'load', function(){
 
             var mapOptions = {
                 zoom: zoom,
@@ -19,7 +16,6 @@ maps = {
 
             if (mapID)
                 maps.map = new gmap.Map(mapID, mapOptions);
-        //});
     },
     markers:{
         collection:{},
