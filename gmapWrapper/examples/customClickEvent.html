@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd"
+    >
+<html lang="en">
+<head>
+    <title><!-- Insert your title here --></title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+    <script type="text/javascript">
+
+      var chart; // global
+
+$(document).ready(function() {
+      
+      /**
+ * Request data from the server, add it to the graph and set a timeout to request again
+ */
+function requestData() {
+    $.ajax({
+        url: 'live-server-data.php',
+        success: function(point) {
+            var series = chart.series[0],
+                shift = series.data.length > 20; // shift if the series is longer than 20
+
+
+
+
+            // add the point
+            chart.series[0].addPoint(point, true, shift);
+            
+            // call it again after one second
+            setTimeout(requestData, 1000);    
+        },
+        cache: false
+    });
+}
+
+$(document).ready(function() {
+    chart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'container',
+            defaultSeriesType: 'spline',
+            events: {
+                load: requestData
+            }
+        },
+        title: {
+            text: 'Live random data'
+        },
+        xAxis: {
+            type: 'datetime',
+            tickPixelInterval: 150,
+            maxZoom: 20 * 1000
+        },
+        yAxis: {
+            minPadding: 0.2,
+            maxPadding: 0.2,
+            title: {
+                text: 'Value',
+                margin: 80
+            }
+        },
+        series: [{
+            name: 'Random data',
+            data: []
+        }]
+    });        
+});
+
+      
+});
+    </script>    
+</head>
+<body>
+    <!-- Insert your content here -->
+
+    <div style="min-width:500px;" id="container"></div>
+</body>
+</html>
